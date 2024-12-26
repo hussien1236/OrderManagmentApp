@@ -1,13 +1,15 @@
+import OmAlert from '../../../components/elements/OmAlert';
+import OmLoading from '../../../components/elements/OmLoading';
 import { Order, useGetOrdersQuery } from '../../../graphql/generated/schema';
 import OrderList from './OrderList';
 
 const OrdersDashboard = () => {
      const { data, loading, error } = useGetOrdersQuery();
         if(loading){
-            return <div>Loading...</div>
+            return <OmLoading/>
         }
         if(error || !data){
-            return <div>Error</div>
+            return <OmAlert message='Error occured while retrieving Orders data'/>
         }
     const orders = data.orders as Order[];
   return (

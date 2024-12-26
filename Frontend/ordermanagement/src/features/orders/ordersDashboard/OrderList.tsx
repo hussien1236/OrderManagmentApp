@@ -1,9 +1,6 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Customer, Order } from "../../../graphql/generated/schema";
-import {AgGridReact} from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
+import OmGrid from "../../../components/elements/OmGrid";
 interface OrderListProps {
     orders: Order[];
 }
@@ -21,21 +18,10 @@ const OrderList = ({orders}: OrderListProps) => {
         { field: 'orderDate' as keyof Order, headerName: 'Order Date', width: 150 },
         { field: 'status' as keyof Order, headerName: 'Status', width: 150 }
     ]);
-   
-    const defaultColDef = useMemo(()=>({
-        sortable: true,
-        filter: true,
-        resizable: true
-    }),[]);
     return (
-    <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-        <AgGridReact
-            rowData={orders}
-            columnDefs={columnDefs}
-            defaultColDef={defaultColDef}
-           // modules={[ClientSideRowModelModule]}
-            />
-    </div>
+    <>
+      <OmGrid rowData={orders} columnDefs={columnDefs}/>
+    </>
   );
 }
 

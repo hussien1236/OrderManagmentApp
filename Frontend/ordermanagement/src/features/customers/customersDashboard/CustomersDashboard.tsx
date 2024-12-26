@@ -1,13 +1,15 @@
+import OmAlert from '../../../components/elements/OmAlert';
+import OmLoading from '../../../components/elements/OmLoading';
 import { Customer, useGetCustomersQuery } from '../../../graphql/generated/schema'
 import CustomerList from './CustomerList';
 
 const CustomersDashboard = () => {
     const { data, loading, error } = useGetCustomersQuery();
     if(loading){
-        return <div>Loading...</div>
+        return <OmLoading/>
     }
     if(error || !data){
-        return <div>Error</div>
+        return <OmAlert message='Error occured while retrieving Customers data'/>
     }
     const customers = data.customers as Customer[];
   return (

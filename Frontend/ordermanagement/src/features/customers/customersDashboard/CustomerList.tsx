@@ -4,6 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
+import OmGrid from '../../../components/elements/OmGrid';
 interface CustomerListProps{
     customers: Customer[];
 }
@@ -24,20 +25,11 @@ const CustomerList = ({customers}: CustomerListProps) => {
             +', '+address.country;
         }},
     ]);
-    const defaultColDef = useMemo(()=>({
-        sortable: true,
-        filter: true,
-        resizable: true
-    }),[]);
   return (
-    <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
-            <AgGridReact
-                rowData={customers}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-            //    modules={[ClientSideRowModelModule]}
-                />
-        </div>
+        <>
+        <OmGrid rowData={customers} columnDefs={columnDefs} />
+        </>
+
   )
 }
 
