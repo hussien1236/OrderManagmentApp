@@ -12,7 +12,7 @@ const OmCheckBox = ({name, label, legend, otherProps}: OmCheckBoxProps) => {
   const {setFieldValue} = useFormikContext();
   const [field, meta] = useField(name);
   function handleChange(event :any){
-    const checked = event.target;
+    const {checked} = event.target;
     setFieldValue(name, checked);
   };
     const configCheckBox = {

@@ -1,16 +1,22 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Address, Customer } from '../../../graphql/generated/schema';
-import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
 import OmGrid from '../../../components/elements/OmGrid';
+import { IconButton } from '@mui/material';
+import LaunchIcon from '@mui/icons-material/Launch';
 interface CustomerListProps{
     customers: Customer[];
 }
 const CustomerList = ({customers}: CustomerListProps) => {
     const [columnDefs] = useState([
-        { field: 'id' as keyof Customer, headerName: 'ID', width: 100, supressSizeToFit: true },
+        { field: 'id' as keyof Customer, headerName: 'ID', width: 100, supressSizeToFit: true,
+          cellRenderer : function(params: any){
+            return ( 
+            <IconButton onClick={()=>window.open(`/customers/${params.value}`,'_black')}>
+              <LaunchIcon fontSize="small" color="secondary"/>
+            </IconButton>
+            )
+          }
+         },
         { field: 'firstName' as keyof Customer, headerName: 'First Name', width: 200 },
         { field: 'lastName' as keyof Customer, headerName: 'Last Name', width: 200 },
         { field: 'contactNumber' as keyof Customer, headerName: 'Phone', width: 200 },
@@ -21,7 +27,7 @@ const CustomerList = ({customers}: CustomerListProps) => {
             return address.addressLine1
             +', '+address.addressLine2
             +', '+address.city
-            +', '+address.state
+            +', '+address.state 
             +', '+address.country;
         }},
     ]);

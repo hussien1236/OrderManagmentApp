@@ -12,14 +12,22 @@
   "dependencies": {
     "@ag-grid-community/client-side-row-model": "^32.3.3",
     "@ag-grid-community/core": "^32.3.3",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@graphql-codegen/typescript": "^2.8.5",
     "@graphql-codegen/typescript-operations": "^2.5.10",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
+    "@mui/icons-material": "^6.3.0",
+    "@mui/material": "^6.3.0",
+    "@mui/system": "^6.3.0",
     "ag-grid-react": "^32.3.3",
+    "date-fns": "^4.1.0",
+    "formik": "^2.4.6",
     "graphql": "^16.6.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.4.2"
+    "react-router-dom": "^6.4.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@apollo/client": "^3.7.2",

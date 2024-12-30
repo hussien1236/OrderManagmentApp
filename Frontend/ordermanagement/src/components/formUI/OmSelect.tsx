@@ -27,7 +27,7 @@ const OmSelect = ({name, options, otherProps}: OmSelectProps) => {
         configSelect.helperText = meta.error;
     }
     return (
-    <TextField {...configSelect}>
+    <TextField {...configSelect} style={{width:'100%'}}>
         {Object.keys(options).map((item, pos) => {
             return (
                 <MenuItem key={pos} value={item}>

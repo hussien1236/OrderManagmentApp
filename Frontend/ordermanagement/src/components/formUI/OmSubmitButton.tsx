@@ -19,7 +19,7 @@ const OmSubmitButton = ({children,otherProps}: OmSubmitButtonProps) => {
         onClick: handleSubmit
     }
   return (
-    <Button {...configSubmitButton}>
+    <Button {...configSubmitButton} style={{width:'100%'}}>
         {children}
     </Button>
   )
