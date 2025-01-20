@@ -1,5 +1,5 @@
 import Button from "@mui/material/Button";
-import { useField, useFormikContext } from "formik"
+import { useFormikContext } from "formik"
 
 interface OmSubmitButtonProps {
     children:any,
@@ -19,7 +19,7 @@ const OmSubmitButton = ({children,otherProps}: OmSubmitButtonProps) => {
         onClick: handleSubmit
     }
   return (
-    <Button {...configSubmitButton} style={{width:'100%'}}>
+    <Button {...configSubmitButton} >
         {children}
     </Button>
   )

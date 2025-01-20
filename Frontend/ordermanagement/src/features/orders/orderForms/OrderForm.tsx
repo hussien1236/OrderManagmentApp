@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Order, Status } from "../../../graphql/generated/schema"
+import { Order, OrderModelInput, Status, useAddOrUpdateOrderMutation } from "../../../graphql/generated/schema"
 import * as yup from 'yup';
 import { useNavigate } from "react-router-dom";
 import { formatDatePicker } from "../../../util/DateFormatter";
@@ -9,10 +9,11 @@ import Grid from "@mui/material/Grid";
 import OmTextField from "../../../components/formUI/OmTextField";
 import OmSelect from "../../../components/formUI/OmSelect";
 import OmDatePicker from "../../../components/formUI/OmDatePicker";
-import { Typography } from "@mui/material";
+import { Alert, Snackbar, Typography } from "@mui/material";
 import OmCheckBox from "../../../components/formUI/OmCheckBox";
 import OmSubmitButton from "../../../components/formUI/OmSubmitButton";
 import statuses from "../../../data/statuses.json";
+import OmLoading from "../../../components/elements/OmLoading";
 interface OrderFormProps {
     order: Order
 };
@@ -43,10 +44,46 @@ const OrderForm = ({order}: OrderFormProps) => {
       isDelivery: order.isDelivery || false,
       status: order.status || Status.Draft,
   };
+  const [addOrUpdateOrder,{loading:addOrUpdateOrderLoading,error:addOrUpdateOrderError}] = useAddOrUpdateOrderMutation();
+  const handleClose = (event:any)=>{
+    if(event.reason === "clickaway")
+      return;
+    setOpen(false);
+  }
+   async function AddOrUpdateOrderDetails(values: OrderModelInput){ 
+    values.orderDate= new Date(values.orderDate);
+      const response = await addOrUpdateOrder({ 
+           variables:{
+               order: values
+           }
+       });
+      setOpen(true);
+      const order = response.data?.addorUpdateOrder as Order;
+       if(order.id)
+         navigate(`/orders/${order.id}`);
+      }
+      if(addOrUpdateOrderLoading)
+        return <OmLoading/>
+      if(addOrUpdateOrderError){
+       // console.log("error: "+addOrUpdateOrderError.stack)
+        return ( 
+        <Snackbar open={true} autoHideDuration={6000}>
+        <Alert severity="error">
+          error in retrieving orders data
+        </Alert>
+      </Snackbar>)}
     return (
      <Container>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert severity="success" onClose={handleClose} className="w-full">
+          {!order.id?"Order details successfully added":"Order details successfully updated"}
+        </Alert>
+      </Snackbar>
       <div>
-         <Formik initialValues={Initial_Form_State} validationSchema={Form_Validation} onSubmit={() => {}}>
+         <Formik 
+          initialValues={Initial_Form_State} 
+          validationSchema={Form_Validation} 
+         onSubmit={AddOrUpdateOrderDetails}>
             <Form>
              <Grid container spacing={2}>
              <Grid item xs={12}>
@@ -71,7 +108,7 @@ const OrderForm = ({order}: OrderFormProps) => {
                  <OmTextField name="totalAmount" otherProps={{label: 'Total Amount'}}/>
                </Grid>
                <Grid item xs={6}>
-                 <OmCheckBox name="isDelivery" legend="Include Delivery" label='Include Delivery' otherProps={{label:'Delivery Included'}} />
+                 <OmCheckBox name="isDelivery" legend="Include Delivery" label='Include Delivery' otherProps={{}} />
                </Grid>
                <Grid item xs={12}>
                  <OmSubmitButton otherProps={{}}>{!order.id?"Add Order":"Update Order"}</OmSubmitButton>

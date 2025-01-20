@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { Form, Formik } from "formik";
-import { Customer } from "../../../graphql/generated/schema";
+import { Customer, CustomerModelInput, useAddOrUpdateCustomerMutation } from "../../../graphql/generated/schema";
 import * as yup from 'yup';
 import { useNavigate } from "react-router-dom";
 import {Container} from "@mui/system";
 import Grid from "@mui/material/Grid";
 import OmTextField from "../../../components/formUI/OmTextField";
-import { Typography } from "@mui/material";
+import { Alert, Snackbar, Typography } from "@mui/material";
 import OmSelect from "../../../components/formUI/OmSelect";
 import OmSubmitButton from "../../../components/formUI/OmSubmitButton";
 import countries from "../../../data/countries.json";
+import OmLoading from "../../../components/elements/OmLoading";
 interface CustomerFormProps{
     customer: Customer;
 };
@@ -49,11 +50,44 @@ const CustomerForm = ({customer} : CustomerFormProps) => {
         state: customer.address?.state || '',
         country: customer.address?.country || '',
     };
+    const [addOrUpdateCustomer,{loading:addOrUpdateCustomerLoading,error:addOrUpdateCustomerError}] = useAddOrUpdateCustomerMutation();
+    const handleClose = (event:any)=>{
+      if(event.reason === "clickaway")
+        return;
+    setOpen(false);
+    }
+    async function AddOrUpdateCustomerDetails(values: CustomerModelInput){
+        const response = await addOrUpdateCustomer({
+            variables:{
+                customer:values
+            }
+        });
+        setOpen(true);
+        const customer = response.data?.addorUpdateCustomer as Customer;
+        if(customer.id){
+            navigate(`/customers/${customer.id}`);
+        }
+    }
+    if(addOrUpdateCustomerLoading)
+        return  <OmLoading/>;
+    if(addOrUpdateCustomerError)
+        return (
+        <Snackbar open={true} autoHideDuration={6000}>
+            <Alert severity="error">Error retreiving customer data</Alert>
+        </Snackbar>
+        );
 
-  return (
+    return (
      <Container>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+           <Alert severity="success" onClose={handleClose} className="w-full">
+            {!customer.id?"Customer details successfully added":"Customer details successfully updated"}
+           </Alert>
+        </Snackbar>
         <div>
-        <Formik initialValues={Initial_Form_State} validationSchema={Form_Validation} onSubmit={(values) => {}}>
+        <Formik initialValues={Initial_Form_State} 
+        validationSchema={Form_Validation} 
+        onSubmit={AddOrUpdateCustomerDetails}>
           <Form>
             <Grid container spacing={3}>
                 <Grid item xs={6}>

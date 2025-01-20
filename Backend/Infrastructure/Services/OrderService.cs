@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
+using Core.Models;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +14,12 @@ namespace Infrastructure.Services
     public class OrderService : IOrderService
     {
         private readonly IDbContextFactory<OMAContext> _contextFactory;
-        public OrderService(IDbContextFactory<OMAContext> contextFactory)
+        private readonly IMapper mapper;
+
+        public OrderService(IDbContextFactory<OMAContext> contextFactory, IMapper mapper)
         {
             _contextFactory = contextFactory;
+            this.mapper = mapper;
         }
 
         public IQueryable<Order> GetOrders()
@@ -25,6 +30,33 @@ namespace Infrastructure.Services
             .Where(o => !o.IsDeleted)
             .Include(o => o.Customer);
         }
+        public async Task<Order> AddorUpdateOrderAsync(OrderModel orderModel)
+        {
+            var context = _contextFactory.CreateDbContext();
+            Order order;
+            var customer = await context.Customers.Where(c => c.Id == orderModel.CustomerId).FirstOrDefaultAsync();
+            if (customer == null)
+            {
+                throw new Exception($"Customer with {orderModel.CustomerId} was not found");
+            }
+            if (orderModel.Id == null)
+            {
+                order = mapper.Map<Order>(orderModel);
+                await context.Orders.AddAsync(order);
+            }
+            else
+            {
+                order = await context.Orders.Where(o => o.Id == orderModel.Id).FirstOrDefaultAsync();
+                if (order == null)
+                {
+                    throw new Exception("Order not found");
+                }
+                mapper.Map(orderModel, order);
+            }
+            await context.SaveChangesAsync();
+            return order;
+        }
+
 
     }
 }
