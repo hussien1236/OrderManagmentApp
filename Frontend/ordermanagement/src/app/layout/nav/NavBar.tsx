@@ -1,4 +1,3 @@
-import React from 'react'
 import '../../../index.css'
 import { Link } from 'react-router-dom'
 const NavBar = () => {
@@ -7,6 +6,7 @@ const NavBar = () => {
    <Link to='/' className='text-white'>Order Management App</Link>
    <Link to='/customers' className='text-white'>Customers</Link>
    <Link to='/orders' className='text-white'>Orders</Link>
+   <Link to='/customers/newcustomer' className='text-white'>New Customer</Link>
   </div>    
   )
 }

@@ -31,6 +31,7 @@ const Form_Validation = yup.object().shape({
     status: yup.string()
 });
 const OrderForm = ({order}: OrderFormProps) => {
+  console.log(order); 
   const [open,setOpen]=useState(false);
   const navigate= useNavigate();
   const Initial_Form_State = {
@@ -51,7 +52,8 @@ const OrderForm = ({order}: OrderFormProps) => {
     setOpen(false);
   }
    async function AddOrUpdateOrderDetails(values: OrderModelInput){ 
-    values.orderDate= new Date(values.orderDate);
+      values.orderDate= new Date(values.orderDate);
+      console.log(values);
       const response = await addOrUpdateOrder({ 
            variables:{
                order: values
@@ -102,10 +104,10 @@ const OrderForm = ({order}: OrderFormProps) => {
                  <Typography className="pt-5 bold text-xl">Pricing Information</Typography>
                </Grid>
                <Grid item xs={12}>
-                 <OmTextField name="depositAmount" otherProps={{label: 'Deposit Amount'}}/>
+                 <OmTextField name="depositAmount" otherProps={{label: 'Deposit Amount', type:'number'}}/>
                </Grid>
                <Grid item xs={12}>
-                 <OmTextField name="totalAmount" otherProps={{label: 'Total Amount'}}/>
+                 <OmTextField name="totalAmount" otherProps={{label: 'Total Amount', type:'number'}}/>
                </Grid>
                <Grid item xs={6}>
                  <OmCheckBox name="isDelivery" legend="Include Delivery" label='Include Delivery' otherProps={{}} />

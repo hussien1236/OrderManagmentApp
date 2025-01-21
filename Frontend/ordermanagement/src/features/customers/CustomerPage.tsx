@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid';
 import CustomerForm from "./customerForms/CustomerForm";
 import OmHeader from "../../components/elements/OmHeader";
 import OrderList from "../orders/ordersDashboard/OrderList";
+import { Button } from "@mui/material";
 
 const CustomerPage = () => {
    const params = useParams();
@@ -30,12 +31,15 @@ const CustomerPage = () => {
         <Grid item xs={12}>
           <CustomerForm customer={customer} />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={8}>
           <OmHeader header="Customer Orders"/>
         </Grid>
         <Grid item xs={12}>
           <OrderList orders={orders} />
         </Grid>
+        <Grid item xs={12}>
+           <Button variant="contained" href={`/customers/${customer.id}/neworder`}>New Order</Button>   
+         </Grid>
       </Grid>
     </Container>
   )
