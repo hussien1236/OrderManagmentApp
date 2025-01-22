@@ -7,5 +7,6 @@ namespace Core.Interfaces
     {
         IQueryable<Order> GetOrders();
         Task<Order> AddorUpdateOrderAsync(OrderModel orderModel);
+        Task<bool> DeleteOrderAsync(int orderId);
     }
 }

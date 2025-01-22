@@ -28,7 +28,7 @@ namespace Infrastructure.Services
             context.Database.EnsureCreated();
             return context.Customers
             .Where(c => !c.IsDeleted)
-            .Include(c => c.Orders)
+            .Include(c => c.Orders.Where(o => !o.IsDeleted))
             .Include(c => c.Address);
         }
         public async Task<Customer> AddorUpdateCustomerAsync(CustomerModel customerModel)
@@ -53,6 +53,25 @@ namespace Infrastructure.Services
             }
             await context.SaveChangesAsync();
             return customer;
+        }
+
+        public async Task<bool> DeleteCustomerAsync(int customerId)
+        {
+            var context = _contextFactory.CreateDbContext();
+            var customer = await context.Customers.Where(c => c.Id == customerId).FirstOrDefaultAsync();
+            if (customer == null)
+            {
+                throw new Exception($"Customer with id: {customerId} was not found");
+            }
+            customer.IsDeleted = true;
+            var orders = await context.Orders.Where(o => o.CustomerId == customerId).ToListAsync();
+            foreach (var order in orders)
+            {
+                order.IsDeleted = true;
+            }
+            context.Customers.Update(customer);
+            context.Orders.UpdateRange(orders);
+            return await context.SaveChangesAsync() > 0;
         }
     }
 }
