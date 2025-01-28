@@ -3,16 +3,18 @@ import { Customer, Order } from "../../../graphql/generated/schema";
 import OmGrid from "../../../components/elements/OmGrid";
 import { IconButton } from "@mui/material";
 import LaunchIcon from '@mui/icons-material/Launch';
+import { useNavigate } from "react-router-dom";
 interface OrderListProps {
     orders: Order[];
 }
 
 const OrderList = ({orders}: OrderListProps) => {
+    const navigate = useNavigate();
     const [columnDefs] = useState([
         { field: 'id' as keyof Order, headerName: 'ID', width: 100, supressSizeToFit: true,
           cellRenderer: function(params: any) {
             return (
-              <IconButton onClick={() => {window.open(`/orders/${params.value}`, '_black');}}>
+              <IconButton onClick={() => {navigate(`/orders/${params.value}`);}}>
                 <LaunchIcon fontSize="small" color="secondary"/>
               </IconButton>
             );

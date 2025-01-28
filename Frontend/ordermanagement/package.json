@@ -2,9 +2,11 @@
   "name": "ordermanagement",
   "private": true,
   "version": "0.0.0",
+  "homepage": "/app",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "move dist ../../Backend/API/wwwroot",
     "lint": "eslint .",
     "preview": "vite preview",
     "codegen": "graphql-codegen --config codegen.ts"

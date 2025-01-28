@@ -3,15 +3,17 @@ import { Address, Customer } from '../../../graphql/generated/schema';
 import OmGrid from '../../../components/elements/OmGrid';
 import { IconButton } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Launch';
+import { useNavigate } from 'react-router-dom';
 interface CustomerListProps{
     customers: Customer[];
 }
 const CustomerList = ({customers}: CustomerListProps) => {
+    const navigate = useNavigate();
     const [columnDefs] = useState([
         { field: 'id' as keyof Customer, headerName: 'ID', width: 100, supressSizeToFit: true,
           cellRenderer : function(params: any){
             return ( 
-            <IconButton onClick={()=>window.open(`/customers/${params.value}`,'_black')}>
+            <IconButton onClick={()=>navigate(`/customers/${params.value}`)}>
               <LaunchIcon fontSize="small" color="secondary"/>
             </IconButton>
             )

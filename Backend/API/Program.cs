@@ -33,11 +33,16 @@ builder.Services.AddCors(options =>
 );
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddControllers(option => option.EnableEndpointRouting = false);
 var app = builder.Build();
+app.UseRouting();
+app.UseMvc();
+app.UseStaticFiles();
+
 app.UseCors(AllowSpecificOrigins);
 app.MapGraphQL();
 app.UseGraphQLVoyager("/graphql-voyager", new VoyagerOptions { GraphQLEndPoint = "/graphql" });
-
+app.MapFallbackToFile("index.html");
 // Migrate Database
 
 try
