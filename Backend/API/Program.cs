@@ -7,10 +7,14 @@ using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 var AllowSpecificOrigins = "_allowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
 // Add services to the container.
 builder.Services.AddDbContextFactory<OMAContext>(options =>
 {
-    options.UseSqlite(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+    options.UseNpgsql(builder.Configuration["ConnectionStrings:DefaultConnection"]);
 });
 builder.Services.AddSingleton<ICustomerService, CustomerService>();
 builder.Services.AddSingleton<IOrderService, OrderService>();
