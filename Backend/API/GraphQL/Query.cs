@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities;
 using Core.Interfaces;
+using HotChocolate.Authorization;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 

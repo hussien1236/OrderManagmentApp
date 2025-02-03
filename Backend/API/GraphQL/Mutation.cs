@@ -1,6 +1,7 @@
 using Core.Entities;
 using Core.Interfaces;
 using Core.Models;
+using HotChocolate.Authorization;
 
 namespace API.GraphQL
 {
